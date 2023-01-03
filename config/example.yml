@@ -1,0 +1,17 @@
+database:
+  ip: '127.0.0.1' # MySQL的IP地址
+  port: '3306' # MySQL的端口
+  user: 'root' # MySQL的用户名
+  password: '159357258' # MySQL对应用户的密码
+  database: 'xiaowei_list' # 使用的MySQL数据库名称
+
+jwt:
+  # token 密钥，生产环境时记得修改
+  secret: 'xiaowei'
+  # token 过期时间 单位：秒
+  timeout: 3600
+
+server:
+  ip: '127.0.0.1' # 服务器的IP地址
+  backend_port: 8080 # 后端运行端口
+  backend_url: 'http://127.0.0.1:8080/api/v1'
