@@ -1,4 +1,4 @@
-package xiaowei_list
+package main
 
 import (
 	"github.com/gin-gonic/gin"
@@ -13,5 +13,8 @@ func main() {
 	// 创建Router
 	r := gin.Default()
 	router.InitRouter(r)
-	r.Run(":" + global.VP.GetString("server.backend_port"))
+	err := r.Run(":" + global.VP.GetString("server.backend_port"))
+	if err != nil {
+		return
+	}
 }

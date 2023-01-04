@@ -11,15 +11,16 @@ import (
 )
 
 // UploadFile
-// @Summary      上传文件
-// @Description  上传一个文件测试
-// @Tags         其他模块
-// @Accept       multipart/form-data
-// @Produce      json
-// @Param        file  formData  file                  true  "文件"
-// @Param        name  formData  string                true  "name"
-// @Success      200   {object}  response.UploadFileA  "是否成功，返回信息"
-// @Router       /resource/upload [post]
+//
+//	@Summary		上传文件
+//	@Description	上传一个文件测试
+//	@Tags			其他模块
+//	@Accept			multipart/form-data
+//	@Produce		json
+//	@Param			file	formData	file					true	"文件"
+//	@Param			name	formData	string					true	"name"
+//	@Success		200		{object}	response.UploadFileA	"是否成功，返回信息"
+//	@Router			/api/v1/resource/upload [post]
 func UploadFile(c *gin.Context) {
 	// 获取请求数据
 	var data response.UploadFileQ

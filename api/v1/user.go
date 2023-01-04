@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -12,14 +13,15 @@ import (
 )
 
 // Register
-// @Summary      注册
-// @Description  注册新用户
-// @Tags         登录模块
-// @Accept       json
-// @Produce      json
-// @Param        data  body      response.RegisterQ  true  "用户名，密码"
-// @Success      200   {object}  response.CommonA    "是否成功，返回信息，Token"
-// @Router       /register [post]
+//
+//	@Summary		注册
+//	@Description	注册新用户
+//	@Tags			登录模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		response.RegisterQ	true	"用户名，密码"
+//	@Success		200		{object}	response.CommonA	"是否成功，返回信息，Token"
+//	@Router			/api/v1/register [post]
 func Register(c *gin.Context) {
 	// 获取请求数据
 	data := utils.BindJsonAndValid(c, &response.RegisterQ{}).(*response.RegisterQ)
@@ -33,8 +35,12 @@ func Register(c *gin.Context) {
 	if err != nil {
 		panic("CreateUser: hash password error")
 	}
+	fmt.Println(data.Username)
+	fmt.Println(string(hashedPassword))
+	fmt.Println(data.Email)
+	fmt.Println(data.Nickname)
 	// 成功创建用户
-	if err := service.CreateUser(&database.User{Username: data.Username, Password: string(hashedPassword)}); err != nil {
+	if err := service.CreateUser(&database.User{Username: data.Username, Password: string(hashedPassword), Nickname: data.Nickname, Email: data.Email, UserType: "user"}); err != nil {
 		panic("CreateUser: create user error")
 	}
 	// 返回响应
@@ -42,16 +48,16 @@ func Register(c *gin.Context) {
 }
 
 // Login
-// @Summary      用户登录
-// @Description  根据用户邮箱和密码等生成token，并将token返回给用户
-// @Tags         登录模块
-// @Accept       json
-// @Produce      json
-// @Param        data  body      response.LoginQ  true  "用户名，密码"
-// @Success      200   {object}  response.LoginA  "是否成功，返回信息，Token"
-// @Router       /login [post]
+//
+//	@Summary		用户登录
+//	@Description	根据用户邮箱和密码等生成token，并将token返回给用户
+//	@Tags			登录模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		response.LoginQ	true	"用户名，密码"
+//	@Success		200		{object}	response.LoginA	"是否成功，返回信息，Token"
+//	@Router			/api/v1/login [post]
 func Login(c *gin.Context) {
-
 	// 获取请求中的数据
 	data := utils.BindJsonAndValid(c, &response.LoginQ{}).(*response.LoginQ)
 	// 用于登录的邮箱未注册的情况
@@ -71,15 +77,16 @@ func Login(c *gin.Context) {
 }
 
 // GetUser
-// @Summary      获取用户资料
-// @Description  获取一个用户公开的详细资料
-// @Tags         用户模块
-// @Accept       json
-// @Produce      json
-// @Param        x-token  header    string             false  "token"
-// @Param        id       path      int                true   "用户ID"
-// @Success      200      {object}  response.GetUserA  "是否成功，返回信息，用户名"
-// @Router       /users/{id} [get]
+//
+//	@Summary		获取用户资料
+//	@Description	获取一个用户公开的详细资料
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			x-token	header		string				false	"token"
+//	@Param			id		path		int					true	"用户ID"
+//	@Success		200		{object}	response.GetUserA	"是否成功，返回信息，用户名"
+//	@Router			/api/v1/users/{id} [get]
 func GetUser(c *gin.Context) {
 	// 获取请求数据
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)

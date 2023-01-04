@@ -21,7 +21,7 @@ func CreateUser(user *database.User) (err error) {
 
 // GetUserByID 根据用户 ID 查询某个用户
 func GetUserByID(ID int) (user database.User, notFound bool) {
-	err := global.DB.Where("UserId = ?", ID).First(&user).Error
+	err := global.DB.First(&user, ID).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return user, true
 	} else if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {

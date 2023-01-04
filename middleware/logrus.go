@@ -16,7 +16,7 @@ import (
 // LoggerToFile 日志记录到文件
 func LoggerToFile() gin.HandlerFunc {
 	logFilePath := filepath.Join(global.VP.GetString("root_path"), "logs")
-	logFileName := "demo.log"
+	logFileName := "xiaowei_list.log"
 	// 日志文件
 	fileName := path.Join(logFilePath, logFileName)
 	// 写入文件

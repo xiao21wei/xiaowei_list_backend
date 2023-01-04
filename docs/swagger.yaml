@@ -1,0 +1,182 @@
+definitions:
+  response.CommonA:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  response.GetUserA:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      name:
+        type: string
+      success:
+        type: boolean
+    type: object
+  response.LoginA:
+    properties:
+      UserId:
+        type: integer
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+    type: object
+  response.LoginQ:
+    properties:
+      password:
+        minLength: 6
+        type: string
+      username:
+        maxLength: 30
+        minLength: 5
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  response.RegisterQ:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+      nickname:
+        maxLength: 30
+        minLength: 8
+        type: string
+      password:
+        maxLength: 30
+        minLength: 8
+        type: string
+      username:
+        maxLength: 30
+        minLength: 5
+        type: string
+    required:
+    - code
+    - email
+    - nickname
+    - password
+    - username
+    type: object
+  response.UploadFileA:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      path:
+        type: string
+      success:
+        type: boolean
+    type: object
+info:
+  version:
+  title:
+  contact: {}
+paths:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: 根据用户邮箱和密码等生成token，并将token返回给用户
+      parameters:
+      - description: 用户名，密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/response.LoginQ'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 是否成功，返回信息，Token
+          schema:
+            $ref: '#/definitions/response.LoginA'
+      summary: 用户登录
+      tags:
+      - 登录模块
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: 注册新用户
+      parameters:
+      - description: 用户名，密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/response.RegisterQ'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 是否成功，返回信息，Token
+          schema:
+            $ref: '#/definitions/response.CommonA'
+      summary: 注册
+      tags:
+      - 登录模块
+  /api/v1/users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取一个用户公开的详细资料
+      parameters:
+      - description: token
+        in: header
+        name: x-token
+        type: string
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 是否成功，返回信息，用户名
+          schema:
+            $ref: '#/definitions/response.GetUserA'
+      summary: 获取用户资料
+      tags:
+      - 用户模块
+  /resource/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传一个文件测试
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 是否成功，返回信息
+          schema:
+            $ref: '#/definitions/response.UploadFileA'
+      summary: 上传文件
+      tags:
+      - 其他模块
+swagger: "2.0"
